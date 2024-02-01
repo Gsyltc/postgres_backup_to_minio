@@ -28,7 +28,7 @@ Service can run on :
 | POSTGRES_USER                 | None         | Database user  (you can use _FILE for the secret)                                                                       | **Mandatory**         |
 | POSTGRES_PASSWD               | None         | Database Password  (you can use _FILE for the secret)                                                                   | **Mandatory**         |
 | POSTGRES_DATABASE             | None         | Database name (you can use _FILE for the secret)                                                                        | **Mandatory**         |
-| POSTGRES_SPLIT_TABLE_AND_DATA | False        | Slip schema and datas in two files                                                                                      | Optionnal             |
+| POSTGRES_SPLIT_TABLE_AND_DATA | False        | Slip schema and datas in two postgres                                                                                      | Optionnal             |
 | POSTGRES_EXCLUDE_TABLE        | Empty String | Exclude export datas from table pattern. Empty String exports all datas                                                 | Optionnal             |
 | POSTGRES_DUMP_FORMAT          | plain        | Format to export data. Values : plain, custom, directory, tar (https://www.postgresql.org/docs/current/app-pgdump.html) | Optionnal             |
 | SCHEDULE                      | None         | Cron expression for schedule                                                                                            | **Mandatory**         |
@@ -59,11 +59,11 @@ docker run -dit -e MINIO_ACCESS_KEY_ID_FILE=$[YOUR_MINIO_ACCESS_KEY_ID_FILE} /
     -e POSTGRES_PASSWD=$[YOUR_POSTGRES_PASSWD} /
     -e POSTGRES_DATABASE=$[YOUR_POSTGRES_DATABASE} /
     -e SCHEDULE=$[YOUR_SCHEDULE} /
-    sgoubaud/backup-files-minio:latest
+    sgoubaud/backup-postgres-minio:latest
 
 or
 
-docker run -dit --env-file ./env.file sgoubaud/backup-files-minio:latest
+docker run -dit --env-file ./env.file sgoubaud/backup-postgres-minio:latest
 
 ```
 
@@ -73,7 +73,7 @@ docker run -dit --env-file ./env.file sgoubaud/backup-files-minio:latest
   version: "3.9"
 
   backup:
-    image: sgoubaud/backup-files-minio:latest
+    image: sgoubaud/backup-postgres-minio:latest
     networks:
       - your_network # if needed
     volumes:
@@ -95,7 +95,7 @@ docker run -dit --env-file ./env.file sgoubaud/backup-files-minio:latest
       - MINIO_TAGS=${MINIO_TAGS}
       - BACKUP_DIR=${BACKUP_DIR}
       - BACKUP_NAME=${BACKUP_NAME}
-      - FILES_PATH=${FILES_PATH}
+      - postgres_PATH=${postgres_PATH}
       - SCHEDULE=${SCHEDULE}
     secrets:
       - MINIO_BACKUP_ACCESS_KEY_ID
@@ -122,11 +122,11 @@ docker run -dit -e MINIO_ACCESS_KEY_ID_FILE=$[YOUR_MINIO_ACCESS_KEY_ID_FILE} /
     -e POSTGRES_PASSWD=$[YOUR_POSTGRES_PASSWD} /
     -e POSTGRES_DATABASE=$[YOUR_POSTGRES_DATABASE} /
     -e SCHEDULE=$[YOUR_SCHEDULE} /
-    sgoubaud/backup-files-minio:latest backup.sh
+    sgoubaud/backup-postgres-minio:latest backup.sh
 
 or
 
-docker run -dit --env-file ./env.file sgoubaud/backup-files-minio:latest backup.sh
+docker run -dit --env-file ./env.file sgoubaud/backup-postgres-minio:latest backup.sh
 
 ```
 
